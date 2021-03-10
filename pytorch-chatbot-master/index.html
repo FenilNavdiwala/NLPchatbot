@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <style>
+    h3 {
+      text-align: center;
+    }
+  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- <script src="./server.js"></script> -->
+  <script>
+    // import axios from 'axios';
+    function req() {
+      let asked = document.getElementById('txt').value;
+      console.log('I am saying', asked);
+      let obj = {
+        query: asked
+      };
+      // axios.get("http://localhost:3000/removeletter", obj).then(rep => {
+      //   console.log(rep.data);
+      //   let x = document.createElement('div');
+      //   x.innerHTML = rep.data;
+      //   document.getElementById('msg').appendChild(x);
+      //   console.log(msg);
+      // });
+
+      axios.post("http://localhost:3000/removeletter", obj).then(rep => {
+        // console.log(rep.data)
+        let y = document.createElement('div');
+        y.innerHTML = rep.data;
+        document.getElementById('msg').appendChild(y);
+        console.log(rep.data);
+      });
+    }
+
+
+  </script>
+</head>
+
+<body>
+  <h3>CHATBOT</h3>
+  <p id="demo" class="center-align"></p>
+  <!-- <textarea id="textarea" cols="20" rows="1" placeholder="write a message"></textarea> -->
+  Name: <input type="text" id="txt" name="name" required>
+  <button onclick="req()">OK</button>
+  <div id="msg">
+  </div>
+  <!-- <a class="waves-effect waves-light btn" href=".API1/removeletter.py">CHATBOT</a> -->
+  </p>
+</body>
+
+</html>

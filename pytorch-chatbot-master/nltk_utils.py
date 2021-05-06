@@ -44,6 +44,18 @@ def bag_of_words(tokenized_sentence, words):
 
     return bag
 
+
+def syn(user_response):
+    synonyms = []   
+    for syn in wordnet.synsets(user_response):
+        for l in syn.lemmas():
+            synonyms.append(l.name())
+        # for i in range(len(synonyms)-1):
+        #     out = response(synonyms[i+1])
+    return synonyms
+
+
+
     
 
 

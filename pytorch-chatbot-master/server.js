@@ -19,18 +19,7 @@ app.get("/", (req, res) => {
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-// app.get("/removeletter", callchatbot);
-// function callchatbot(req, res) {
-//   console.log("body get -> ", req.body);
-//   console.log(req.body)
-//   var spawn = require("child_process").spawn;
-//   var process = spawn("python3", ["./pytorch-chatbot-master/chat.py" + req.body]);
-//   process.stdout.on("data", function (data) {
-//     console.log("response 1 data", data.toString());
-//     // document.getElementById(data.toString());
-//     res.send(data.toString());
-//   });
-// }
+
 app.post("/", (req, res) => {
   res.sendFile("index.html", { root: __dirname });
 });
@@ -53,39 +42,3 @@ function callchatbot(req, res) {
 
   });
 }
-
-
-
-
-// app.post("/test", (req, res) => {
-//   console.log("body POST -> ", req.body.query);
-//   var spawn1 = require("child_process").spawn;
-//   var process = spawn1("python3", ["./pytorch-chatbot-master/chat.py","-o", "--Output" + req.body.query]);
-//   process.stdout.on("data", function (data) {
-//     console.log("response to DATA",data.toString());
-//     // document.getElementById(data.toString());
-//     res.send(data.toString());
-//   });
-// });
-// app.post('/post-test', (req, res) => {
-//   console.log('Got body:', req.body);
-//   res.sendStatus(200);
-// });
-
-
-// app.listen(3000);
-// var PythonShell = require('python-shell');
-
-// var options = {
-//   mode: 'text',
-//   args: [asked]
-// };
-
-// PythonShell.run('removeletter.py', options, function (err, results) {
-//   if (err) throw err;
-//   // results is an array consisting of messages collected during execution
-//   console.log('results: %j', results);
-// });
-
-
-

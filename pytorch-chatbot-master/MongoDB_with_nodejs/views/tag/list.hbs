@@ -1,0 +1,25 @@
+<h3><a class="btn btn-secondary" href="/tag"></a> TagList </h3>
+<table>
+    <thead>
+        <tr>
+            <th>agentname</th>
+            <th>intentname</th>
+            <th>Training Phrase</th>
+            <th>Response</th>
+            <th>entityname</th>
+            <th>entity Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each lsit}}
+        <tr>    
+            <td>{{this.agentname}}</td>
+            <td>{{this.intentname}}</td>
+            <td>{{this.Training Phrase}}</td>
+            <td>{{this.Response}}</td>
+            <td>{{this.etityname}}</td>
+            <td>{{this.entity Value}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

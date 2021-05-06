@@ -5,38 +5,57 @@ import json
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-
-from nltk_utils import bag_of_words, tokenize, stem
+from pymongo import MongoClient
+from bson import ObjectId
+from nltk_utils import bag_of_words, tokenize, stem, syn
 from model import NeuralNet
 
-with open('intents.json', 'r') as f:
-    intents = json.load(f)
+
+# Database Url Nd Password
+client = MongoClient(
+    "mongodb+srv://admin:admin123@cluster1.ycoy8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+db = client["myFirstDatabase"]
+collection = db["chatbots"]
+
+y = collection.find({"_id": ObjectId("6051b174e1801a35d1336993")})
+a = y.next()
 
 all_words = []
 tags = []
-xy = []#hold both our patterens and thrren the text
+xy = []  # hold both our patterens and thrren the text
 # loop through each sentence in our intents patterns
-for intent in intents['intents']:
-    tag = intent['tag']
-    # add to tag list
-    tags.append(tag)
-    for pattern in intent['patterns']:
+K = a['intents']
+
+A = []  # Tag
+TP = []  # trainingPhrase
+R = []  # response
+for i in range(len(K)):
+    A.append(K[i]['intentName'])
+    TP.append(K[i]['trainingPhrase'])
+    R. append(K[i]['response'])
+
+# w = []
+index = 0
+for i in TP:
+    for word in i:
         # tokenize each word in the sentence
-        w = tokenize(pattern)
+        w = tokenize(word)
+        print(w,'======')
         # add to our words list
         all_words.extend(w)
-        # add to xy pair
-        xy.append((w, tag))
+    # add to xy pair
+    xy.append((w, A[index]))
+    index = index+1
 
 # stem and lower each word
 ignore_words = ['?', '.', '!']
 all_words = [stem(w) for w in all_words if w not in ignore_words]
 # remove duplicates elements and sort
 all_words = sorted(set(all_words))
-tags = sorted(set(tags))
+tags = sorted(set(A))
 
 print(len(xy), "patterns")
-print(len(tags), "tags:", tags)
+print(len(A), "tags:", tags)
 print(len(all_words), "unique stemmed words:", all_words)
 
 # create training data
@@ -47,13 +66,13 @@ for (pattern_sentence, tag) in xy:
     bag = bag_of_words(pattern_sentence, all_words)
     X_train.append(bag)
     # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
-    label = tags.index(tag)
+    label = tag.index(tag)
     y_train.append(label)
 
 X_train = np.array(X_train)
 y_train = np.array(y_train)
 
-# Hyper-parameters 
+# Hyper-parameters
 num_epochs = 1000
 batch_size = 8
 learning_rate = 0.001
@@ -61,6 +80,7 @@ input_size = len(X_train[0])
 hidden_size = 8
 output_size = len(tags)
 print(input_size, output_size)
+
 
 class ChatDataset(Dataset):
 
@@ -76,6 +96,7 @@ class ChatDataset(Dataset):
     # we can call len(dataset) to return the size
     def __len__(self):
         return self.n_samples
+
 
 dataset = ChatDataset()
 train_loader = DataLoader(dataset=dataset,
@@ -96,31 +117,31 @@ for epoch in range(num_epochs):
     for (words, labels) in train_loader:
         words = words.to(device)
         labels = labels.to(dtype=torch.long).to(device)
-        
+
         # Forward pass
         outputs = model(words)
         # if y would be one-hot, we must apply
         # labels = torch.max(labels, 1)[1]
         loss = criterion(outputs, labels)
-        
+
         # Backward and optimize
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
+
     if (epoch+1) % 100 == 0:
-        print (f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
 
 print(f'final loss: {loss.item():.4f}')
 
 data = {
-"model_state": model.state_dict(),
-"input_size": input_size,
-"hidden_size": hidden_size,
-"output_size": output_size,
-"all_words": all_words,
-"tags": tags
+    "model_state": model.state_dict(),
+    "input_size": input_size,
+    "hidden_size": hidden_size,
+    "output_size": output_size,
+    "all_words": all_words,
+    "tags": tags
 }
 
 FILE = "data.pth"

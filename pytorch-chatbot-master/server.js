@@ -30,7 +30,7 @@ function callchatbot(req, res) {
   // console.log(req.body)  
   var spawn1 = require("child_process").spawn;
   // var process = spawn1("python3", ["./pytorch-chatbot-master/chat.py","-o" + req.body.query]);
-  var process = spawn1("python3", ["/home/fenil/Desktop/API1/pytorch-chatbot-master/chat.py",req.body.query])
+  var process = spawn1("python3", ["/home/fenil/nlp/pytorch-chatbot-master/chat.py",req.body.query])
   console.log(req.body.query)
   process.stdout.on("data", function (data) {
     console.log("response TO DATA", data.toString());

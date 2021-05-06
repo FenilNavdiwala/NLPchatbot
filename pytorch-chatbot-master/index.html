@@ -164,7 +164,7 @@ body {
     // import axios from 'axios';
     function req() {
       let asked = document.getElementById('txt').value;
-      console.log('I am saying', asked);
+      console.log(asked);
 
       let obj = {
         query: asked
@@ -183,13 +183,13 @@ body {
         // console.log(rep.data)
         // document.getElementById('msg').appendChild(y);
         console.log(rep.data);
-      appendMessage(PERSON_NAME, PERSON_IMG, "right", asked);
+       appendMessage(PERSON_NAME, PERSON_IMG, "right", asked);
         botResponse(rep.data);
       });
     }
     let msgerChat = get(".msger-chat");
     const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
-const BOT_NAME = "BOT";
+    const BOT_NAME = "BOT";
 
     function appendMessage(name, img, side, text) {
   //   Simple solution for small apps

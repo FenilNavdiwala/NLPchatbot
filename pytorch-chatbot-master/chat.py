@@ -28,7 +28,7 @@ for i in range(len(K)):
     TP.append(K[i]['trainingPhrase'])
     R. append(K[i]['response'])
 
-FILE = "data.pth"
+FILE = "/home/fenil/nlp/pytorch-chatbot-master/data.pth"
 data = torch.load(FILE)
 
 input_size = data["input_size"]
@@ -44,7 +44,8 @@ model.load_state_dict(model_state)
 model.eval()
 
 bot_name = "Fenil"
-sentence = sys.argv[1]
+sentence = "what is AI?"
+# sentence = sys.argv[1]
 # print(sentence)
 _sentence = tokenize(sentence)
 X = bag_of_words(_sentence, all_words)
@@ -63,11 +64,11 @@ prob = probs[0][predicted.item()]
 
 res = None
 # print(prob.item())
-if prob.item() > 0.75:
+if prob.item() > 0.5:
     for data in K:
         if data['intentName'] == sentence or sentence in data["trainingPhrase"]:
             res = data['response']
             print(res)
             break
-    if not res:
-        print(f"{bot_name}: I do not understand...")
+        if not res:
+            print(f"{bot_name}: I do not understand...")
